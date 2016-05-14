@@ -132,24 +132,24 @@ namespace Lab_01_BULCOW
             }
 
             if (exitQuit == "Y")
-                            {
-                                // When the user quits
-                                WriteLine();
-                                WriteLine("You have quit the game.  You should have guessed " + solutionNum + ", loser.  ;)");
-                                WriteLine();
-                                Write("Please press a key to continue.");
-                                int gameEnd = Read();
-                            }
-                            else 
-                            {
-                                // When the user's guess matches the computer's number
-                                WriteLine();
-                                WriteLine("CONGRATULATIONS!  You guessed my number: " + solutionNum);
-                                WriteLine();
-                                Write("Please press a key to end the game.");
-                                int gameEnd = Read();
-                            }
-                        }
-                    }
-                }
+            {
+                // When the user quits
+                WriteLine();
+                WriteLine("You have quit the game.  You should have guessed " + solutionNum + ", loser.  ;)");
+                WriteLine();
+                Write("Please press a key to continue.");
+                int gameEnd = Read();
+            }
+            else 
+            {
+                // When the user's guess matches the computer's number
+                WriteLine();
+                WriteLine("CONGRATULATIONS!  You guessed my number: " + solutionNum);
+                WriteLine();
+                Write("Please press a key to end the game.");
+                int gameEnd = Read();
+            }
+        }
+    }
+}
  
