@@ -1,4 +1,4 @@
-﻿// Created by Andy E. Wold and Miranda Motter
+// Created by Andy E. Wold and Miranda Motter
 // CS 176 -- Windows Desktop Development
 // Lab #1 [BULCOW Game]
 // Date 13 May 2016
@@ -30,7 +30,7 @@ namespace Lab_01_BULCOW
             // Generate a 5-digit number with unique 
             while (solutionNum.Length < 5)
             {
-                TryAgain:
+            TryAgain:
                 // Reassign number to random int
                 checkNum = rnd.Next(1, 9);
 
@@ -41,7 +41,6 @@ namespace Lab_01_BULCOW
 
                 //Test
                 WriteLine("solutionNum is now: " + solutionNum);
-
             }
 
             //Test
@@ -66,6 +65,8 @@ namespace Lab_01_BULCOW
             // Once the number is correctly guessed, it will exit the WHILE loop
             while (solutionNum != userGuess)
             {
+                invalidGuess:
+
                 // Get guess from user
                 Write("Please enter your guess or \"00000\" to quit: ");
                 userGuess = ReadLine();
@@ -77,44 +78,44 @@ namespace Lab_01_BULCOW
                     exitQuit = "Y";
                     userGuess = solutionNum;
                 }
+                else if (userGuess.Length != 5)
+                {
+                    WriteLine("Guess contains wrong number of digits. Please try again.");
+                    goto invalidGuess;
+                }
 
-                //Test Note:  Work on number checks after logic is finished 
-                /*
-                                // Confirm that guessed number digits are from 1 to 9
-                                string validNumbers = "123456789";
-                                for (int i = 0; i < 5; i++)
-                                {
-                                    if (validNumbers.Contains(Convert.ToString(checkNum)))
-                                        continue;
-                                    else
-                                    {
-                                        Write("You did not enter numbers between 1 and 9.");
-                                        break;
-                                    }
-                                }
+                // Test Note:  Work on number checks after logic is finished 
+                // Confirm that guessed number digits are from 1 to 9
+                string validNumbers = "123456789";
 
-                                // Confirm that guessed number contains unique digits
-                                for (int i = 0; i < 5; i++)
-                                {
-                                    // Check the last digit of the guess against the remaining digits
-                                    checkNum = userGuess[i];
-                                    string checkRemain = userGuess.Trim(userGuess[-i]);
+                for (int i = 0; i < 5; i++)
+                {
+                    if (validNumbers.Contains(Convert.ToString(userGuess[i])))
+                        continue;
+                    else
+                    {
+                        WriteLine("You did not enter numbers between 1 and 9.");
+                        goto invalidGuess;
+                    }
+                }
 
-                                    //Test 
-                                    Write("checkRemain is: " + checkRemain 
-                                        + ", which is checked against " + checkNum);
-
-                                    // Check number for duplicates
-                                    if (checkRemain.Contains(Convert.ToString(checkNum)))
-                                        Write("  Your guess contains duplicate digits.");
-                                        break;
-                                }
-*/
+                // Check the last digit of the guess against the remaining digits
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (i != j && userGuess[i] == userGuess[j])
+                        {
+                            WriteLine("Your guess contains duplicate digits.");
+                            goto invalidGuess;
+                        }
+                    }
+                }
 
                 // Determine the number of Bulls
                 for (int i = 0; i < 5; i++)
                 {
-                    if(solutionNum[i] == userGuess[i])
+                    if (solutionNum[i] == userGuess[i])
                         countBull++;
                 }
                 Write("Bulls: " + countBull);
@@ -140,16 +141,15 @@ namespace Lab_01_BULCOW
                 Write("Please press a key to continue.");
                 int gameEnd = Read();
             }
-            else 
+            else
             {
                 // When the user's guess matches the computer's number
                 WriteLine();
                 WriteLine("CONGRATULATIONS!  You guessed my number: " + solutionNum);
                 WriteLine();
-                Write("Please press a key to end the game.");
-                int gameEnd = Read();
+                Console.Write("Press <Enter> to exit... ");
+                while (Console.ReadKey().Key != ConsoleKey.Enter) { }
             }
         }
     }
 }
- 
