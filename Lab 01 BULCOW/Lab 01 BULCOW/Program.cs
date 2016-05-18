@@ -1,7 +1,11 @@
-// Created by Andy E. Wold and Miranda Motter
-// CS 176 -- Windows Desktop Development
-// Lab #1 [BULCOW Game]
-// Date 13 May 2016
+/*
+Project: Lab #1 [BULCOW Game]
+Name: Created by Andy E. Wold and Miranda Motter
+Date: Wed, 18 May 2016
+Description: Number guessing game 
+Instructor: Bro. Daniel Masterson, Jr.
+Section: CS 176 -- Windows Desktop Development [C#]
+*/
 
 using System;
 using static System.Console;
@@ -14,26 +18,62 @@ namespace Lab_01_BULCOW
 {
     class Program
     {
+        static string DetermineBullCow(string sN, string uG, int cB, int cC)
+        {
+            if (uG != "00000")
+            {
+                // Determine the number of Bulls
+                for (int i = 0; i < 5; i++)
+                {
+                    if (sN[i] == uG[i])
+                    {
+                        cB++;
+                    }
+                }
+                Write("Bulls: " + cB);
+
+                // Determine the number of Cows
+                for (int i = 0; i < 5; i++)
+                {
+                    if (sN.Contains(uG[i]))
+                    {
+                        cC++;
+                    }
+                }
+                cC = cC - cB;
+                WriteLine("  Cows: " + cC);
+            }
+            cB = 0;
+            cC = 0;
+
+            return sN;
+        }
+            
         static void Main(string[] args)
         {
+            PlayAgain:
+            Clear();
             Random rnd = new Random();
 
             // Initialize victory number
             int checkNum = 0;
+            int guessCount = 0;
             string solutionNum = "";
             string exitQuit = "";
 
             // Generate a 5-digit number with unique numbers
             while (solutionNum.Length < 5)
             {
-            	TryAgain:
+                TryAgain:
 
                 // Reassign number to random int
                 checkNum = rnd.Next(1, 9);
 
                 // Check number for duplicates
                 if (solutionNum.Contains(Convert.ToString(checkNum)))
+                {
                     goto TryAgain;
+                }
                 solutionNum = solutionNum + Convert.ToString(checkNum);
 
             }
@@ -70,7 +110,8 @@ namespace Lab_01_BULCOW
                 if (userGuess == "00000")
                 {
                     exitQuit = "Y";
-                    userGuess = solutionNum;
+                    guessCount = guessCount--;
+                    break;
                 }
                 else if (userGuess.Length != 5)
                 {
@@ -105,43 +146,33 @@ namespace Lab_01_BULCOW
                     }
                 }
 
-                // Determine the number of Bulls
-                for (int i = 0; i < 5; i++)
-                {
-                    if (solutionNum[i] == userGuess[i])
-                        countBull++;
-                }
-                Write("Bulls: " + countBull);
-
-                // Determine the number of Cows
-                for (int i = 0; i < 5; i++)
-                {
-                    if (solutionNum.Contains(userGuess[i]))
-                        countCows++;
-                }
-                countCows = countCows - countBull;
-                WriteLine("  Cows: " + countCows);
-                countBull = 0;
-                countCows = 0;
+                string results = DetermineBullCow(solutionNum,userGuess,countBull,countCows);
+                guessCount++;
             }
 
             if (exitQuit == "Y")
             {
                 // When the user quits
                 WriteLine();
-                WriteLine("You have quit the game.  You should have guessed " + solutionNum + ", loser.  ;)");
-                WriteLine();
-                Write("Please press a key to continue.");
-                int gameEnd = Read();
+                WriteLine("You have quit the game after only " + guessCount + " guesses.");
+                WriteLine("You should have guessed " + solutionNum + ", loser.  ;)");
             }
             else
             {
                 // When the user's guess matches the computer's number
                 WriteLine();
-                WriteLine("CONGRATULATIONS!  You guessed my number: " + solutionNum);
-                WriteLine();
-                Console.Write("Press <Enter> to exit... ");
-                while (Console.ReadKey().Key != ConsoleKey.Enter) { }
+                WriteLine("CONGRATULATIONS!  You guessed my number, " + solutionNum + ", in only " 
+                    + guessCount + " guesses!");
+            }
+
+            // Ask user if they would like to play again
+            WriteLine();
+            Write("Would you like to play again? (Y/N) ");
+            var replaySelection = ReadKey();
+            while (replaySelection.Key != ConsoleKey.Y && replaySelection.Key != ConsoleKey.N) { }
+            if (replaySelection.Key == ConsoleKey.Y)
+            {
+                goto PlayAgain;
             }
         }
     }
